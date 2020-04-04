@@ -7,6 +7,17 @@ def pdump(obj, filename):
 	import pickle
 	pickle.dump(obj, open(filename, 'wb'))
 
+def ang2pc(arcsec, distance):
+	import numpy as np
+	return np.deg2rad(arcsec/3600.0)*distance
+
+def d2m(d):
+	import numpy as np
+	return 5.0*np.log10(d)-5.0
+
+def m2d(m):
+	return 10**(m/5.0+1.0)
+
 def drizit(flcinput, drcoutput, skysub=True, grow=3):
 	from drizzlepac import astrodrizzle#{{{#
 	astrodrizzle.AstroDrizzle(flcinput, output=drcoutput, \
@@ -58,17 +69,6 @@ def drizit(flcinput, drcoutput, skysub=True, grow=3):
 		final_bits=96, \
 		final_rot=None, \
 		final_scale=None)#}}}#
-
-def ang2pc(arcsec, distance):
-	import numpy as np
-	return np.deg2rad(arcsec/3600.0)*distance
-
-def d2m(d):
-	import numpy as np
-	return 5.0*np.log10(d)-5.0
-
-def m2d(m):
-	return 10**(m/5.0+1.0)
 
 def gotods9(regfilename, xpos, ypos, color='green'):
 	line1='# Region file format: DS9 version 4.1'#{{{#
