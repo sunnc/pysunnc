@@ -1,4 +1,5 @@
 def world2pix(ra, dec, ra0, dec0):
+	import numpy as np
 	from astropy import wcs
 	w=wcs.WCS(naxis=2)
 	w.wcs.crpix=[0.0, 0.0]
@@ -10,6 +11,7 @@ def world2pix(ra, dec, ra0, dec0):
 	return (pix[:, 0], pix[:, 1])
 
 def pix2world(xx, yy, ra0, dec0):
+	import numpy as np
 	from astropy import wcs
 	w=wcs.WCS(naxis=2)
 	w.wcs.crpix=[0.0, 0.0]
