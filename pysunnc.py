@@ -1,3 +1,33 @@
+def world2pix(ra, dec, ra0, dec0):
+	from astropy import wcs
+	w=wcs.WCS(naxis=2)
+	w.wcs.crpix=[0.0, 0.0]
+	w.wcs.cdelt=[1.0, 1.0]
+	w.wcs.crval=[ra0, dec0]
+	w.wcs.ctype=["RA---TAN", "DEC--TAN"]
+	world=np.transpose(np.vstack([tab['ra'], tab['dec']]))
+	pix=w.all_world2pix(world, 1)
+	return (pix[:, 0], pix[:, 1])
+
+def pix2world(xx, yy, ra0, dec0):
+	from astropy import wcs
+	w=wcs.WCS(naxis=2)
+	w.wcs.crpix=[0.0, 0.0]
+	w.wcs.cdelt=[1.0, 1.0]
+	w.wcs.crval=[ra0, dec0]
+	w.wcs.ctype=["RA---TAN", "DEC--TAN"]
+	pix=np.transpose(np.vstack([xx, yy]))
+	world=w.all_pix2world(pix, 1)
+	return (world[:, 0], world[:, 1])
+
+def savefig(fig, filename, openfig=True):
+	import os
+	import matplotlib.pyplot as plt
+	fig.tight_layout()
+	fig.savefig(filename)
+	plt.close(fig)
+	if openfig: os.system('open '+filename)
+
 def pload(filename):
 	import pickle
 	obj=pickle.load(open(filename, 'rb'))
