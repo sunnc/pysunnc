@@ -6,7 +6,7 @@ def world2pix(ra, dec, ra0, dec0):
 	w.wcs.cdelt=[1.0, 1.0]
 	w.wcs.crval=[ra0, dec0]
 	w.wcs.ctype=["RA---TAN", "DEC--TAN"]
-	world=np.transpose(np.vstack([tab['ra'], tab['dec']]))
+	world=np.transpose(np.vstack([ra, dec]))
 	pix=w.all_world2pix(world, 1)
 	return (pix[:, 0], pix[:, 1])
 
