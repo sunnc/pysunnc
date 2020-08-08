@@ -32,12 +32,16 @@ def savefig(fig, filename, openfig=True):
 
 def pload(filename):
 	import pickle
-	obj=pickle.load(open(filename, 'rb'))
+	f=open(filename, 'rb')
+	obj=pickle.load(f)
+	f.close()
 	return obj
 
 def pdump(obj, filename):
 	import pickle
-	pickle.dump(obj, open(filename, 'wb'))
+	f=open(filename, 'wb')
+	pickle.dump(obj, f)
+	f.close()
 
 def ang2pc(arcsec, distance):
 	import numpy as np
