@@ -115,7 +115,7 @@ def gotods9(regfilename, xpos, ypos, color='green'):
 	print(line2, file=open(regfilename, 'a'))
 	print(line3, file=open(regfilename, 'a'))
 	for ii in range(len(xpos)):
-		line='point('+"%8.3f"%(xpos[ii]+0.5)+','+"%8.3f"%(ypos[ii]+0.5)+') # point=circle'
+		line='point('+"%8.3f"%(xpos[ii])+','+"%8.3f"%(ypos[ii])+') # point=circle'
 		print(line, file=open(regfilename, 'a'))#}}}#
 
 def matchstars(file1, file2):
@@ -251,6 +251,36 @@ def dpread(zzdp, out):
 	#write
 	srcTab.write(out+'.dat', format='ascii', overwrite=True)
 	gotods9(out+'.reg', srcTab['xpos'], srcTab['ypos'])#}}}#
+
+def getphot(zzdp):
+	import os#{{{#
+	import numpy as np
+	from astropy.table import Table
+
+	#get filters
+	with open(zzdp+'.columns') as f: content=f.readlines()
+	filters=[]
+	for jj in range(len(content)):
+		if 'Total counts,' in content[jj]:
+			filters.append(content[jj].split(', ')[-1].replace('\n', ''))
+	#get rows and names
+	rh=np.array([3, 4, 6, 7, 8, 10, 11])-1
+	r0=np.array([16, 18, 20, 21, 22, 23, 24])-1
+	usecols=[rh]
+	dtype=[('xpos', float), ('ypos', float), \
+		('snr', float), ('shp', float), \
+		('rnd', float), ('crd', float), \
+		('obj', int)]
+	for jj in range(len(filters)):
+		usecols.append(r0+13*jj)
+		dtype=dtype+[('mag'+filters[jj], float), ('err'+filters[jj], float), \
+			('snr'+filters[jj], float), ('shp'+filters[jj], float), \
+			('rnd'+filters[jj], float), ('crd'+filters[jj], float), \
+			('qfg'+filters[jj], int)]
+	usecols=list(np.hstack(usecols))
+	#read
+	srcTab=Table(np.loadtxt(zzdp, usecols=usecols, dtype=dtype))
+	return srcTab #}}}#
 
 def readsynspec(filename):
 	import numpy as np#{{{#
