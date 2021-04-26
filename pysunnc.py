@@ -1,3 +1,29 @@
+def crossPx(x1, y1, x2, y2, max_dist):
+	import numpy as np
+	from astroML.crossmatch import crossmatch
+	im1=np.empty((len(x1), 2), dtype=float)
+	im1[:, 0]=x1
+	im1[:, 1]=y1
+	im2=np.empty((len(x2), 2), dtype=float)
+	im2[:, 0]=x2
+	im2[:, 1]=y2
+	(dist, idx)=crossmatch(im1, im2, max_distance=max_dist)
+	match=~np.isinf(dist)
+	return (match, idx[match], dist[match])
+
+def crossAg(ra1, dec1, ra2, dec2, max_dist):
+	import numpy as np
+	from astroML.crossmatch import crossmatch_augular
+	im1=np.empty((len(ra1), 2), dtype=float)
+	im1[:, 0]=ra1
+	im1[:, 1]=dec1
+	im2=np.empty((len(ra2), 2), dtype=float)
+	im2[:, 0]=ra2
+	im2[:, 1]=dec2
+	(dist, idx)=crossmatch_augular(im1, im2, max_distance=max_dist)
+	match=~np.isinf(dist)
+	return (match, idx[match], dist[match])
+
 def world2pix(ra, dec, ra0, dec0):
 	import numpy as np
 	from astropy import wcs
