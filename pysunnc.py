@@ -357,6 +357,18 @@ def reddenspec(sp, EBV, ext):
 	sp_ext=S.ArraySpectrum(sp.wave[idx], flux_ext, waveunits='angstrom', fluxunits='flam')
 	return sp_ext#}}}#
 
+def avspec(sp, Av, ext):
+	import astropy.units as u#{{{#
+	import numpy as np
+	import pysynphot as S
+	idx=np.logical_and(sp.wave>(1.0/10.0)*1e4, sp.wave<(1.0/0.3)*1e4)
+	wave=sp.wave[idx]*u.AA
+	flux=sp.flux[idx]
+	ee=ext.extinguish(wave, Av=Av)
+	flux_ext=flux*ee
+	sp_ext=S.ArraySpectrum(sp.wave[idx], flux_ext, waveunits='angstrom', fluxunits='flam')
+	return sp_ext#}}}#
+
 def readbpstarmodel(filename):
 	import numpy as np#{{{#
 	from astropy.table import Table
